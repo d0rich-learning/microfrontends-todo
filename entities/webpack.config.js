@@ -2,6 +2,14 @@ const HtmlWebPackPlugin = require("html-webpack-plugin");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
 
 const deps = require("./package.json").dependencies;
+
+const moduleFederationConfigShared = {
+  name: "entities",
+  exposes: {
+    "./Counter": "./src/Counter",
+  },
+}
+
 module.exports = {
   output: {
     publicPath: "http://localhost:8081/",
@@ -36,16 +44,21 @@ module.exports = {
           loader: "babel-loader",
         },
       },
+      {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "dts-loader",
+          options: moduleFederationConfigShared
+        },
+      },
     ],
   },
   plugins: [ // This is important part
     new ModuleFederationPlugin({
-      name: "entities",
+      ...moduleFederationConfigShared,
       filename: "remoteEntry.js",
       remotes: {},
-      exposes: {
-        "./Counter": "./src/Counter",
-      },
       shared: {
         ...deps,
         react: {
