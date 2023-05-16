@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Counter } from 'counter/Counter'
+import { Counter } from 'entities/Counter'
 
 import "./index.scss";
 

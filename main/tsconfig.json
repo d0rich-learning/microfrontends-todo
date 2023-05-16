@@ -5,7 +5,8 @@
     "module": "commonjs",
     "baseUrl": "./",
     "paths": {
-      "*": ["*", "types/*"]
+      // Simulate remote types import
+      "*": ["*", "../entities/.wp_federation/*"]
     },
     "esModuleInterop": true,                             
     "forceConsistentCasingInFileNames": true, 

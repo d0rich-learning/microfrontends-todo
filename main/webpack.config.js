@@ -1,10 +1,5 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
-const WebpackRemoteTypesPlugin = require("webpack-remote-types-plugin").default
-
-const moduleFederationRemotes = {
-  counter: "entities@http://localhost:8081/remoteEntry.js",
-}
 
 const deps = require("./package.json").dependencies;
 module.exports = (_, argv) => ({
@@ -48,7 +43,9 @@ module.exports = (_, argv) => ({
     new ModuleFederationPlugin({
       name: "main",
       filename: "remoteEntry.js",
-      remotes: moduleFederationRemotes,
+      remotes: {
+        entities: "entities@http://localhost:8081/remoteEntry.js",
+      },
       exposes: {},
       shared: {
         ...deps,
@@ -61,11 +58,6 @@ module.exports = (_, argv) => ({
           requiredVersion: deps["react-dom"],
         },
       },
-    }),
-    new WebpackRemoteTypesPlugin({
-      remotes: moduleFederationRemotes,
-      outputDir: 'types', // supports [name] as the remote name
-      remoteFileName: '[name]-dts.tgz'
     }),
     new HtmlWebPackPlugin({
       template: "./src/index.html",
