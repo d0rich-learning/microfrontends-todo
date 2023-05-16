@@ -2,7 +2,7 @@ const HtmlWebPackPlugin = require("html-webpack-plugin");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
 
 const deps = require("./package.json").dependencies;
-module.exports = (_, argv) => ({
+module.exports = {
   output: {
     publicPath: "http://localhost:8081/",
   },
@@ -38,13 +38,14 @@ module.exports = (_, argv) => ({
       },
     ],
   },
-
-  plugins: [
+  plugins: [ // This is important part
     new ModuleFederationPlugin({
       name: "entities",
       filename: "remoteEntry.js",
       remotes: {},
-      exposes: {},
+      exposes: {
+        "./Counter": "./src/Counter",
+      },
       shared: {
         ...deps,
         react: {
@@ -61,4 +62,4 @@ module.exports = (_, argv) => ({
       template: "./src/index.html",
     }),
   ],
-});
+};

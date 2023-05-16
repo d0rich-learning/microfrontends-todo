@@ -39,11 +39,13 @@ module.exports = (_, argv) => ({
     ],
   },
 
-  plugins: [
+  plugins: [ // This is important part
     new ModuleFederationPlugin({
       name: "main",
       filename: "remoteEntry.js",
-      remotes: {},
+      remotes: {
+        counter: "entities@http://localhost:8081/remoteEntry.js",
+      },
       exposes: {},
       shared: {
         ...deps,
